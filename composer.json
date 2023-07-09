@@ -1,0 +1,14 @@
+{
+    "name": "eams2/router",
+    "description": "simple custom php",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "aris"
+        }
+    ]
+}

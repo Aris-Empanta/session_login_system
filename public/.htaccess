@@ -1,0 +1,9 @@
+# We enable the apache server's RewriteEngine, in order to
+# write rules that modify the incoming URL requests .
+RewriteEngine On
+
+# Deliver the folder or file directly if it exists on the server (like if statements)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php?$1 [L,QSA]
