@@ -6,14 +6,12 @@ require_once '../src/Router.php';
 
 $router = new Router();
 
-$uri = trim($_SERVER['REQUEST_URI'], '/');
+//$uri = trim($_SERVER['REQUEST_URI'], '/');
 
-echo $uri;
+$uri = $_SERVER['REQUEST_URI'];
 
-print_r(explode('/', $uri));
+$router->get('', 'Home', 'render');
 
 $router->get('home', 'Home', 'render');
 
 $router->run();
-
-print_r($router->getAllRoutes());

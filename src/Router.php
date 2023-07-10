@@ -20,16 +20,22 @@ class Router
 
     public function run() {
 
-        //We evaluate is the request uri exists as a key in the router array:
-        foreach($this->routes as $route) {
+        //We evaluate if the request uri exists as a key in the router array:
+        foreach($this->routes as $key => $value) {
 
+            //We remove the forward slashes "/" befor and after
             $uri = trim($_SERVER['REQUEST_URI'], '/');
 
-            //we split the $uri parts to an array
+            //we split the $uri of the client to an array
             $uriArray = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 
-            //We do the same for the $route in the $routes array that we compare
-            $routeArray = explode('/', $route);
+            if($uri === $key) {
+                echo $uri;
+            } else {
+                echo 'Not Found';
+            }
+
+            
         }
     }
 
