@@ -9,7 +9,7 @@ class Router
     //The router params to be filled
     protected array $params;
 
-    protected array $query;
+    protected array $queryParams;
 
     //We populate the routes array depending the HTTP method.
     public function get($uri, $controller, $action ) {
@@ -26,19 +26,34 @@ class Router
     public function run() {
 
          //We remove the forward slashes "/" befor and after
-         $initialUri = trim($_SERVER['REQUEST_URI'], '/');
+         $initialUri = trim($_SERVER['REQUEST_URI'], "/");
 
-         //We remove any queries from the client's uri if they exist
-         $uri = preg_replace('/\w+\?\w+=\w+(&\w+=\w+)*$/' ,'', $initialUri);
+         //echo $initialUri;
+
+         //We remove any queries from the client's uri if they exist and remove the slashes before and after
+         $uri = trim(preg_replace('/\w+\?\w+=\w+(&\w+=\w+)*$/' ,'', $initialUri), '/');
          
-        echo $uri;
+         //we isolate the query string without the first part (word?)
+         $queryString = preg_replace('/\w+\?/', '', str_replace($uri.'/', '', $initialUri));
+         $queryArray = explode('&',$queryString);
+         
+
+         foreach($queryArray as $query) {
+
+            $keyValuePair = explode('=', $query);
+
+            $this->queryParams[$keyValuePair[0]] = $keyValuePair[1];
+         }
+
+         print_r($this->queryParams);
+        //echo $uri;
 
         //We examine each registered route one by one
         foreach($this->routes as $key => $value) {          
 
             // first we check if the route exists (sanitised and case insensitive).
             if($uri === $key) {
-                echo $uri;
+          //      echo $uri;
                // $this->handleQuery();
                 return;
             }
