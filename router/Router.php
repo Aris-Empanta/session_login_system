@@ -15,6 +15,9 @@ class Router
     //the query params of the current route
     protected array $queryParams = [];
 
+    //The request body
+    protected $body;
+
     //The variable to ckeck if it is a uri with params.
     private bool $uriHasParams = false;
 
@@ -64,6 +67,16 @@ class Router
         }
     }
 
+    private function extractRequestBody($method) {
+        
+        if ( $method === 'POST' || $method  === 'PUT' || $method  === 'PATCH' || 
+             $method  === 'DELETE' || $method  === 'OPTIONS' || $method  === 'ANY') {
+           
+           if( file_get_contents("php://input") )
+               $this->body = file_get_contents("php://input");
+        }
+    }
+
     public function run() {
 
         //We remove the forward slashes "/" before and after.
@@ -83,6 +96,7 @@ class Router
               if($value['method'] === $_SERVER['REQUEST_METHOD']) {  
 
                 $this->handleBasicRoute($uri);
+                $this->extractRequestBody($value['method']);
                 return;
               }
             }

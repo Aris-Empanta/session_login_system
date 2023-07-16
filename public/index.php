@@ -12,4 +12,6 @@ $router->get('home', 'Home', 'render');
 
 $router->get('user/home{id}/{number}', 'Home', 'render');
 
+$router->put('change', 'Home', 'render');
+
 $router->run();
