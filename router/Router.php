@@ -18,6 +18,9 @@ class Router
     //The request body
     protected $body;
 
+    //The body in case of form post request
+    protected array $formBody;
+
     //The variable to ckeck if it is a uri with params.
     private bool $uriHasParams = false;
 
@@ -77,6 +80,15 @@ class Router
         }
     }
 
+    private function extractFormBody($method) {
+        
+        if ( $method === 'POST' ) {
+           
+            if (!empty($_POST)) 
+               $this->formBody = $_POST;
+        }
+    }
+
     public function run() {
 
         //We remove the forward slashes "/" before and after.
@@ -97,6 +109,8 @@ class Router
 
                 $this->handleBasicRoute($uri);
                 $this->extractRequestBody($value['method']);
+                $this->extractFormBody($value['method']);
+
                 return;
               }
             }
