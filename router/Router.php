@@ -19,16 +19,23 @@ class Router
     protected $body;
 
     //The body in case of form post request
-    protected array $formBody;
+    protected array $formBody = [];
 
     //The variable to ckeck if it is a uri with params.
     private bool $uriHasParams = false;
 
+    /*
+        The methods below are tools to be used in the run method.
+    */
+
+    //The case of simple uri without params
     private function handleBasicRoute($uri) {
         
-        echo $uri;
+        echo $uri;    
     }
-
+    
+    //The method below checks if the uri has params. if true, 
+    // we save them in the $params array
     private function evaluateParamsUri($key, $uri) {
 
         //We replace the {} part with capturing naming group.
@@ -51,6 +58,7 @@ class Router
         }
     }
 
+    //The method to extract any query params if they exist
     private function extractQueryParams($initialUri, $uri) {
 
         //we isolate the query string without the first part (word?)
@@ -70,6 +78,7 @@ class Router
         }
     }
 
+    //The method to extract the body for any HTTP method that supports body
     private function extractRequestBody($method) {
         
         if ( $method === 'POST' || $method  === 'PUT' || $method  === 'PATCH' || 
@@ -80,6 +89,7 @@ class Router
         }
     }
 
+    //The method to extract the body in case of form post method.
     private function extractFormBody($method) {
         
         if ( $method === 'POST' ) {
@@ -89,10 +99,11 @@ class Router
         }
     }
 
+    // The method that actually runs the entire router.
     public function run() {
 
-        //We remove the forward slashes "/" before and after.
-        $initialUri = trim($_SERVER['REQUEST_URI'], "/");
+        //We remove the forward slashes "/" before and after, and we sanitize it.
+        $initialUri = htmlspecialchars(trim($_SERVER['REQUEST_URI'], "/"), ENT_QUOTES, 'UTF-8');
 
         //We remove any queries from the client's uri if they exist and remove the slashes before and after.
         $uri = trim(preg_replace('/\w+\?\w+=\w+(&\w+=\w+)*$/' ,'', $initialUri), '/');
@@ -101,15 +112,16 @@ class Router
         $this->extractQueryParams($initialUri, $uri);         
 
         //We examine each registered route one by one
-        foreach($this->routes as $key => $value) {          
+        foreach($this->routes as $registeredUri => $handler) {          
 
             // first we check if the route exists (sanitised and case insensitive).
-            if($uri === $key) {
-              if($value['method'] === $_SERVER['REQUEST_METHOD']) {  
+            if($uri === $registeredUri) {
+              if($handler['method'] === $_SERVER['REQUEST_METHOD']) {  
 
+                
+                $this->extractRequestBody($handler['method']);
+                $this->extractFormBody($handler['method']);
                 $this->handleBasicRoute($uri);
-                $this->extractRequestBody($value['method']);
-                $this->extractFormBody($value['method']);
 
                 return;
               }
@@ -118,9 +130,11 @@ class Router
             //We check if it matches, e.g. '/user/{id}/name{id}. If 
             //it is true, we check if the current uri corresponds to the 
             //registered one.
-            if(preg_match_all('/{(\w+)}/', $key, $matches)) {
+            if(preg_match_all('/{(\w+)}/', $registeredUri, $matches)) {
                 
-                $this->evaluateParamsUri($key, $uri);                 
+                $this->extractRequestBody($handler['method']);
+                $this->extractFormBody($handler['method']);
+                $this->evaluateParamsUri($registeredUri, $uri);                 
             }    
             
             //If it matched a uri with params, we stop the method from further executing.
