@@ -2,16 +2,8 @@
 
 declare(strict_types=1);
 
-require '../router/Router.php';
+require '../app/app.php';
 
-$router = new Router();
+$app = new App();
 
-$router->get('', 'Home', 'render');
-
-$router->get('home', 'Home', 'render');
-
-$router->get('user/home{id}/{number}', 'Dome', 'render');
-
-$router->put('change', 'Home', 'render');
-
-$router->run();
+$app->run();
