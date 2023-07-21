@@ -29,14 +29,15 @@ class Router
     */
 
     //The case of simple uri without params
-    private function handleBasicRoute($uri) {
+    private function handleBasicRoute($uri, $handler) {
         
         echo $uri;    
+        echo $handler['controller'];
     }
     
     //The method below checks if the uri has params. if true, 
     // we save them in the $params array
-    private function evaluateParamsUri($key, $uri) {
+    private function handleUriWithParams($key, $uri, $handler) {
 
         //We replace the {} part with capturing naming group.
         $pattern = preg_replace('/{(\w+)}/', '(?P<$1>[^/]+)', $key);
@@ -55,6 +56,8 @@ class Router
             }
 
             $this->uriHasParams = true;
+
+            echo $handler['controller'];
         }
     }
 
@@ -84,8 +87,9 @@ class Router
         if ( $method === 'POST' || $method  === 'PUT' || $method  === 'PATCH' || 
              $method  === 'DELETE' || $method  === 'OPTIONS' || $method  === 'ANY') {
            
+           // We check if body exist and if true we sanitize it to avoid XSS attacks.      
            if( file_get_contents("php://input") )
-               $this->body = file_get_contents("php://input");
+               $this->body = htmlspecialchars(file_get_contents("php://input"), ENT_QUOTES, 'UTF-8');
         }
     }
 
@@ -94,7 +98,13 @@ class Router
         
         if ( $method === 'POST' ) {
            
-            if (!empty($_POST)) 
+            //We sanitize the form body if it exist to avoid XSS attacks.
+            if (!empty($_POST)) {
+
+                foreach ($_POST as $key => $value) {
+                    $_POST[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+                }
+            }
                $this->formBody = $_POST;
         }
     }
@@ -121,7 +131,7 @@ class Router
                 
                 $this->extractRequestBody($handler['method']);
                 $this->extractFormBody($handler['method']);
-                $this->handleBasicRoute($uri);
+                $this->handleBasicRoute($uri, $handler);
 
                 return;
               }
@@ -134,7 +144,7 @@ class Router
                 
                 $this->extractRequestBody($handler['method']);
                 $this->extractFormBody($handler['method']);
-                $this->evaluateParamsUri($registeredUri, $uri);                 
+                $this->handleUriWithParams($registeredUri, $uri, $handler);                 
             }    
             
             //If it matched a uri with params, we stop the method from further executing.

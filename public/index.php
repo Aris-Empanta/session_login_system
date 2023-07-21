@@ -10,7 +10,7 @@ $router->get('', 'Home', 'render');
 
 $router->get('home', 'Home', 'render');
 
-$router->get('user/home{id}/{number}', 'Home', 'render');
+$router->get('user/home{id}/{number}', 'Dome', 'render');
 
 $router->put('change', 'Home', 'render');
 
