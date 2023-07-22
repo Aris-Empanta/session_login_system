@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-require '../app/app.php';
+//We import the autoloader so we can use namespaces.
+require_once dirname(__DIR__) . '/vendor/autoload.php'; 
+
+use App\App;
 
 $app = new App();
 

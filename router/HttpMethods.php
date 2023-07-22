@@ -1,5 +1,6 @@
 <?php
 
+namespace Router;
 
 trait HttpMethods 
 {

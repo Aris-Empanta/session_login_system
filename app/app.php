@@ -1,6 +1,7 @@
 <?php
 
-require '../router/Router.php';
+namespace App;
+use Router\Router;
 
 class App
 {
@@ -12,10 +13,20 @@ class App
 
         $router->get('home', 'Home', 'render');
 
-        $router->get('user/home{id}/{number}', 'Dome', 'render');
+        $router->get('user/home{id}/{number}', 'Home', 'renderParams');
 
         $router->put('change', 'Home', 'render');
 
-        $router->run();
+        $router->configure();
+
+        $activeController = $router->controller;
+
+        $action = $router->action;
+
+        $controllerNamespace = "App\\Controllers\\" . $activeController;
+
+        $controller = new $controllerNamespace($router);
+
+        $controller->$action();
     }
 }

@@ -1,33 +1,43 @@
 <?php
 
-require 'HttpMethods.php';
+namespace Router;
 
 class Router
 {
     use HttpMethods;
     
     //The array of all registered routes
-    protected array $routes = [];
+    public array $routes = [];
 
     //The params of the current route
-    protected array $params = [];
+    public array $params = [];
 
     //the query params of the current route
-    protected array $queryParams = [];
+    public array $queryParams = [];
 
     //The request body
-    protected $body;
+    public $body;
 
     //The body in case of form post request
-    protected array $formBody = [];
+    public array $formBody = [];
 
     //The variable to ckeck if it is a uri with params.
     private bool $uriHasParams = false;
 
+    //The controller class for the requested uri.
+    public string $controller;
+
+    //The controller's method to be ran depending the uri.
+    public string $action;
+
+    //We make it true in case of a non existing uri
+    public bool $pageNotFound = false;
+
     /*
-     The method that actually runs the entire router.
+       This method fills up all the appropriate properties e.g. params array,
+       depending the client's uri.
     */
-    public function run() {
+    public function configure() {
 
         //We remove the forward slashes "/" before and after, and we sanitize it.
         $initialUri = htmlspecialchars(trim($_SERVER['REQUEST_URI'], "/"), ENT_QUOTES, 'UTF-8');
@@ -44,11 +54,12 @@ class Router
             // first we check if the route exists (sanitised and case insensitive).
             if($uri === $registeredUri) {
               if($handler['method'] === $_SERVER['REQUEST_METHOD']) {  
-
                 
                 $this->extractRequestBody($handler['method']);
                 $this->extractFormBody($handler['method']);
-                $this->handleBasicRoute($uri, $handler);
+
+                $this->controller = $handler['controller'];
+                $this->action = $handler['action'];
 
                 return;
               }
@@ -57,34 +68,34 @@ class Router
             //We check if it matches, e.g. '/user/{id}/name{id}. If 
             //it is true, we check if the current uri corresponds to the 
             //registered one.
-            if(preg_match_all('/{(\w+)}/', $registeredUri, $matches)) {
+            if(preg_match_all('/{(\w+)}/', $registeredUri, $matches)) {          
                 
-                $this->extractRequestBody($handler['method']);
-                $this->extractFormBody($handler['method']);
-                $this->handleUriWithParams($registeredUri, $uri, $handler);                 
+                $this->extractParams($registeredUri, $uri, $handler);                
             }    
             
-            //If it matched a uri with params, we stop the method from further executing.
-            if($this->uriHasParams)
+            //If it matched a uri with params, we extract all the properties needed 
+            //and we stop the method from further executing.
+            if($this->uriHasParams){
+
+                $this->extractRequestBody($handler['method']);
+                $this->extractFormBody($handler['method']);
+
+                $this->controller = $handler['controller'];
+                $this->action = $handler['action'];
+
                 return;
+            }
         }
         echo 'Not Found';
     }
 
     /*
-        The methods below are tools to be used in the run method.
+        The methods below are tools to be used in the configure method.
     */
-
-    //The case of simple uri without params
-    private function handleBasicRoute($uri, $handler) {
-        
-        echo $uri;    
-        echo $handler['controller'];
-    }
     
     //The method below checks if the uri has params. if true, 
     // we save them in the $params array
-    private function handleUriWithParams($key, $uri, $handler) {
+    private function extractParams($key, $uri) {
 
         //We replace the {} part with capturing naming group.
         $pattern = preg_replace('/{(\w+)}/', '(?P<$1>[^/]+)', $key);
@@ -103,8 +114,6 @@ class Router
             }
 
             $this->uriHasParams = true;
-
-            echo $handler['controller'];
         }
     }
 
@@ -152,7 +161,8 @@ class Router
                     $_POST[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
                 }
             }
-               $this->formBody = $_POST;
+
+            $this->formBody = $_POST;
         }
     }
 }
