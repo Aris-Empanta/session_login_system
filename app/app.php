@@ -10,8 +10,22 @@ class App
         require_once "../config/routes.php";   
         require "../config/constants.php";     
 
+        //Handling a non existing uri from the client
+        if($router->pageNotFound === true) {
+
+            $pageNotFoundNamespace = CONTROLLERS_NAMESPACE . PAGE_NOT_FOUND;
+
+            $controller = new $pageNotFoundNamespace();
+
+            $action = PAGE_NOT_FOUND_ACTION;
+
+            $controller->$action();
+
+            return;
+        }
+
         //We initialize the controller with its namespace depending the uri.
-        $controllerNamespace = CONTROLLERS_NAMESPECE . $router->controller;
+        $controllerNamespace = CONTROLLERS_NAMESPACE . $router->controller;
 
         $controller = new $controllerNamespace($router);
 
