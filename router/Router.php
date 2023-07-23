@@ -39,7 +39,8 @@ class Router
     */
     public function configure() {
 
-        //We remove the forward slashes "/" before and after, and we sanitize it.
+        //From the client's input uri, we remove the forward slashes "/" before and after, 
+        //and we sanitize it.
         $initialUri = htmlspecialchars(trim($_SERVER['REQUEST_URI'], "/"), ENT_QUOTES, 'UTF-8');
 
         //We remove any queries from the client's uri if they exist and remove the slashes before and after.
@@ -51,8 +52,12 @@ class Router
         //We examine each registered route one by one
         foreach($this->routes as $registeredUri => $handler) {          
 
+            //We make the examined registered uri and client's uri case insensitive
+            $lowerCaseRegisteredUri = strtolower($registeredUri);
+            $lowerCaseClientUri = strtolower($uri);
+
             // first we check if the route exists (sanitised and case insensitive).
-            if($uri === $registeredUri) {
+            if($lowerCaseClientUri === $lowerCaseRegisteredUri) {
               if($handler['method'] === $_SERVER['REQUEST_METHOD']) {  
                 
                 $this->extractRequestBody($handler['method']);
@@ -86,7 +91,7 @@ class Router
                 return;
             }
         }
-        echo 'Not Found';
+        $this->pageNotFound = true;
     }
 
     /*
@@ -95,16 +100,16 @@ class Router
     
     //The method below checks if the uri has params. if true, 
     // we save them in the $params array
-    private function extractParams($key, $uri) {
+    private function extractParams($registeredUri, $uri, $handler) {
 
         //We replace the {} part with capturing naming group.
-        $pattern = preg_replace('/{(\w+)}/', '(?P<$1>[^/]+)', $key);
+        $pattern = preg_replace('/{(\w+)}/', '(?P<$1>[^/]+)', $registeredUri);
                         
-        //We concatonate the pattern and assign it to the route
-        $routePattern = "#^$pattern$#";
+        //We concatonate the pattern and assign it to the route. We assure it is case insensitive
+        $routePattern = "#^$pattern$#i";
 
         //We now check if it matches the $uri and the request method
-        if (preg_match($routePattern, $uri, $matches) && $_SERVER['REQUEST_METHOD']) {
+        if (preg_match($routePattern, $uri, $matches) && $_SERVER['REQUEST_METHOD'] === $handler['method']) {
 
             //From the matches array, we keep only the string keys, which are the params.
             foreach ($matches as $key => $value) {
@@ -127,13 +132,14 @@ class Router
             $queryArray = explode('&',$queryString);
         
 
-         foreach($queryArray as $query) {
+            foreach($queryArray as $query) {
 
-            $keyValuePair = explode('=', $query);
+                $keyValuePair = explode('=', $query);
 
-            $this->queryParams[$keyValuePair[0]] = $keyValuePair[1];
-          }
-          print_r($this->queryParams);
+                $this->queryParams[$keyValuePair[0]] = $keyValuePair[1];
+            }
+
+            print_r($this->queryParams);
         }
     }
 

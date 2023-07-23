@@ -1,32 +1,23 @@
 <?php
 
 namespace App;
-use Router\Router;
 
 class App
 {
     public function run()
     {
-        $router = new Router();
+        //We import the config files
+        require_once "../config/routes.php";   
+        require "../config/constants.php";     
 
-        $router->get('', 'Home', 'render');
-
-        $router->get('home', 'Home', 'render');
-
-        $router->get('user/home{id}/{number}', 'Home', 'renderParams');
-
-        $router->put('change', 'Home', 'render');
-
-        $router->configure();
-
-        $activeController = $router->controller;
-
-        $action = $router->action;
-
-        $controllerNamespace = "App\\Controllers\\" . $activeController;
+        //We initialize the controller with its namespace depending the uri.
+        $controllerNamespace = CONTROLLERS_NAMESPECE . $router->controller;
 
         $controller = new $controllerNamespace($router);
 
+        $action = $router->action;
+
+        //We run the controller's method needed depending the uri.
         $controller->$action();
     }
 }
