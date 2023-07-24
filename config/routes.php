@@ -4,12 +4,8 @@ use Router\Router;
 
 $router = new Router();
 
-$router->get('', 'Home', 'render');
-
-$router->get('home', 'Home', 'render');
-
-$router->get('user/home{id}/{number}', 'Home', 'renderParams');
-
-$router->put('change', 'Home', 'render');
+//Import all your route files or write them here directly.
+require __DIR__ . '/routes/mine.php';
+require __DIR__ . '/routes/yours.php';
 
 $router->configure();

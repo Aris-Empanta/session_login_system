@@ -3,10 +3,11 @@
 namespace Router;
 
 trait HttpMethods 
-{
-    
+{    
     //We populate the routes array depending the HTTP method.
     public function get($uri, $controller, $action ) {
+
+        $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'GET') {
             $this->routes[$uri] = [
@@ -19,6 +20,8 @@ trait HttpMethods
 
     public function post($uri, $controller, $action ) {
 
+        $uri = $this->getPrefix() . $uri;
+
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->routes[$uri] = [
                 'method' => 'POST',
@@ -29,6 +32,8 @@ trait HttpMethods
     }
 
     public function put($uri, $controller, $action ) {
+
+        $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $this->routes[$uri] = [
@@ -41,6 +46,8 @@ trait HttpMethods
 
     public function patch($uri, $controller, $action ) {
 
+        $uri = $this->getPrefix() . $uri;
+
         if($_SERVER['REQUEST_METHOD'] === 'PATCH') {
             $this->routes[$uri] = [
                 'method' => 'PATCH',
@@ -51,6 +58,8 @@ trait HttpMethods
     }
 
     public function delete($uri, $controller, $action ) {
+
+        $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             $this->routes[$uri] = [
@@ -74,6 +83,8 @@ trait HttpMethods
 
     public function options($uri, $controller, $action ) {
 
+        $uri = $this->getPrefix() . $uri;
+
         if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
             $this->routes[$uri] = [
                 'method' => 'OPTIONS',
@@ -85,6 +96,8 @@ trait HttpMethods
 
     public function trace($uri, $controller, $action ) {
 
+        $uri = $this->getPrefix() . $uri;
+
         if($_SERVER['REQUEST_METHOD'] === 'TRACE') {
             $this->routes[$uri] = [
                 'method' => 'TRACE',
@@ -95,6 +108,8 @@ trait HttpMethods
     }
 
     public function all($uri, $controller, $action ) {
+
+        $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'ANY') {
             $this->routes[$uri] = [

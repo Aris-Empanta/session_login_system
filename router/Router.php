@@ -4,6 +4,7 @@ namespace Router;
 
 class Router
 {
+    use Prefix;
     use HttpMethods;
     
     //The array of all registered routes
