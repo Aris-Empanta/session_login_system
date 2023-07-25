@@ -4,6 +4,8 @@ namespace Router;
 
 class Router
 {
+    
+    use Middleware;
     use Prefix;
     use HttpMethods;
     
@@ -26,13 +28,15 @@ class Router
     private bool $uriHasParams = false;
 
     //The controller class for the requested uri.
-    public string $controller;
+    public string $controller = "";
 
     //The controller's method to be ran depending the uri.
-    public string $action;
+    public string $action = "";
 
     //We make it true in case of a non existing uri
     public bool $pageNotFound = false;
+
+    public bool $groupedRoutes = false;
 
     /*
        This method fills up all the appropriate properties e.g. params array,
@@ -60,6 +64,8 @@ class Router
             // first we check if the route exists (sanitised and case insensitive).
             if($lowerCaseClientUri === $lowerCaseRegisteredUri) {
               if($handler['method'] === $_SERVER['REQUEST_METHOD']) {  
+
+                $this->runMiddleware($handler['middleware']);
                 
                 $this->extractRequestBody($handler['method']);
                 $this->extractFormBody($handler['method']);
@@ -111,6 +117,8 @@ class Router
 
         //We now check if it matches the $uri and the request method
         if (preg_match($routePattern, $uri, $matches) && $_SERVER['REQUEST_METHOD'] === $handler['method']) {
+
+            $this->runMiddleware($handler['middleware']);
 
             //From the matches array, we keep only the string keys, which are the params.
             foreach ($matches as $key => $value) {

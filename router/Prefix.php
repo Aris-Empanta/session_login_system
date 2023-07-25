@@ -23,11 +23,17 @@ trait Prefix
     //Grouping routes
     public function group(array $createRouteMethods): self
     {
+        $this->groupedRoutes = true;
 
+        //we fill up the routes array with the http methods array
         foreach($createRouteMethods as $createRoute) {
             $createRoute;
         }
 
+        $this->resetMiddlewareArray();
+
+        $this->groupedRoutes = false;
+        
         return $this;
     }
 }

@@ -7,19 +7,31 @@ trait HttpMethods
     //We populate the routes array depending the HTTP method.
     public function get($uri, $controller, $action ) {
 
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
-
+ 
         if($_SERVER['REQUEST_METHOD'] === 'GET') {
             $this->routes[$uri] = [
                 'method' => 'GET',
                 'controller' => $controller,
-                'action' => $action
+                'action' => $action,
+                'middleware' => $this->getMiddlewareArray()
             ];
         }
+
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function post($uri, $controller, $action ) {
 
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,10 +41,20 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function put($uri, $controller, $action ) {
-
+       
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'PUT') {
@@ -42,10 +64,20 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function patch($uri, $controller, $action ) {
-
+        
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'PATCH') {
@@ -55,10 +87,20 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function delete($uri, $controller, $action ) {
-
+        
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'DELETE') {
@@ -68,9 +110,21 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function head($uri, $controller, $action ) {
+
+        //We add the prefix (if exists) to the uri.
+        $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'HEAD') {
             $this->routes[$uri] = [
@@ -79,10 +133,20 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function options($uri, $controller, $action ) {
 
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -92,10 +156,20 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function trace($uri, $controller, $action ) {
-
+        
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'TRACE') {
@@ -105,10 +179,20 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 
     public function all($uri, $controller, $action ) {
-
+        
+        //We add the prefix (if exists) to the uri.
         $uri = $this->getPrefix() . $uri;
 
         if($_SERVER['REQUEST_METHOD'] === 'ANY') {
@@ -118,5 +202,14 @@ trait HttpMethods
                 'action' => $action
             ];
         }
+        
+        /*
+            If the method does not belong to a prefix group, we empty the
+            middleware callbacks array, otherwise it is handled by the grouping 
+            method 
+        */
+        if($this->groupedRoutes === false)
+            $this->resetMiddlewareArray();
+
     }
 }
