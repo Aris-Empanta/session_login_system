@@ -22,9 +22,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -45,9 +46,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -68,9 +70,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -91,9 +94,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -114,9 +118,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -137,9 +142,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -160,9 +166,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -183,9 +190,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
 
     }
@@ -206,10 +214,10 @@ trait HttpMethods
         /*
             If the method does not belong to a prefix group, we empty the
             middleware callbacks array, otherwise it is handled by the grouping 
-            method 
+            method. Also it resets an array if we put middleware in a specific route 
+            of the group.
         */
-        if($this->groupedRoutes === false)
+        if($this->groupedRoutes === false || $this->middlewareInspecificRoute === true)
             $this->resetMiddlewareArray();
-
     }
 }

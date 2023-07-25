@@ -38,6 +38,8 @@ class Router
 
     public bool $groupedRoutes = false;
 
+    public bool $middlewareInspecificRoute = false;
+
     /*
        This method fills up all the appropriate properties e.g. params array,
        depending the client's uri.

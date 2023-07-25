@@ -9,6 +9,9 @@ trait Middleware
     //we pass the callbacks in the above property.
     public function middleware(...$callbacks) : self
     {
+        if($this->groupedRoutes === true)
+            $this->middlewareInspecificRoute = true;
+
         foreach($callbacks as $callback) {
             $this->callbacks[] = $callback;
         }
