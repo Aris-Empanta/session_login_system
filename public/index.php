@@ -10,3 +10,5 @@ use App\App;
 $app = new App();
 
 $app->run();
+
+trigger_error("notice", E_ERROR);

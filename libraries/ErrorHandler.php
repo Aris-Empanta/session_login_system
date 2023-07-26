@@ -4,8 +4,6 @@ namespace Libraries;
 
 use DateTime;
 require dirname(__DIR__) .'/config/constants.php';
-use App\Controllers\Error;
-
 
 class ErrorHandler
 {
@@ -23,7 +21,7 @@ class ErrorHandler
         */
         $errorMessage = htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8');
 
-        $errorsLog = dirname(dirname(__DIR__)). ERRORS_LOG;
+        $errorsLog = dirname(__DIR__). ERRORS_LOG;
 
         $formattedErrorMessage = ErrorHandler::formatErrorMessage($errorNumber, $errorMessage, $errorFile, $errorLine);     
         
@@ -33,8 +31,11 @@ class ErrorHandler
             echo $formattedErrorMessage;
         }
         else {
-            //use the error controller
-            Error::index();
+            //show the error page
+            $errorControllerNamespace = ERROR_CONTROLLER_NAMESPACE;
+            $action = ERROR_CONTROLLER_ACTION;
+
+            $errorControllerNamespace::$action();
         }
         
 
@@ -64,7 +65,7 @@ class ErrorHandler
             if (in_array($errorNumber, [E_ERROR, E_PARSE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING])) {
                 // We clean the output buffer in order to render the error page below.
                 ob_clean();
-                $errorsLog = dirname(dirname(__DIR__)) . ERRORS_LOG;
+                $errorsLog = dirname(__DIR__) . ERRORS_LOG;
     
                 $writeToFile = fopen($errorsLog, 'a'); // Use 'a' mode for appending
     
@@ -77,8 +78,11 @@ class ErrorHandler
                         echo $errorMessage;
                     }
                     else {
-                        //use the error controller
-                        Error::index();
+                        //show the error page
+                        $errorControllerNamespace = ERROR_CONTROLLER_NAMESPACE;
+                        $action = ERROR_CONTROLLER_ACTION;
+
+                        $errorControllerNamespace::$action();
                     }
     
                     fwrite($writeToFile, $errorMessage);
@@ -115,8 +119,6 @@ class ErrorHandler
             if($value === $errorNumber)
                 $errorType = $key;
         }
-
-        //return $errorType;
 
         return  '[' . $date->format('r') . '] [ Error Type: ' . $errorType . '] ' 
                 . $errorMessage . ' - OCCURED IN ' . $errorFile . ' IN LINE '

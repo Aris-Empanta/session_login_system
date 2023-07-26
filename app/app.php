@@ -1,19 +1,26 @@
 <?php
 
 namespace App;
-
+use Libraries\ErrorHandler;
+            
 class App
 {
     public function run()
     {
         //We import the config files
         require_once "../config/routes.php";   
-        require "../config/constants.php";     
+        require "../config/constants.php";           
+
+        //Handling non-fatal errors
+        set_error_handler([ErrorHandler::class, 'handleNonFatalErrors']);
+
+        //Handling fatal errors
+        register_shutdown_function([ErrorHandler::class, 'handleFatalErrors']);
 
         //Handling a non existing uri from the client
         if($router->pageNotFound === true) {
 
-            $pageNotFoundNamespace = CONTROLLERS_NAMESPACE . PAGE_NOT_FOUND;
+            $pageNotFoundNamespace = ERROR_CONTROLLERS_NAMESPACE . PAGE_NOT_FOUND;
 
             $controller = new $pageNotFoundNamespace();
 
