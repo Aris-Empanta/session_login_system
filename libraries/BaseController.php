@@ -1,8 +1,10 @@
 <?php
 
 namespace Libraries;
-use Router\Router;
 
-class BaseController extends Router
+class BaseController
 {
+    public function renderView()
+    {
+    }
 }
