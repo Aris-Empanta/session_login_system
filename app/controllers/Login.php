@@ -2,8 +2,9 @@
 
 namespace App\Controllers;
 use Router\Router;
+use Libraries\BaseController;
 
-class Home
+class Login extends BaseController
 {
 
     private Router $request;
@@ -13,13 +14,8 @@ class Home
         $this->request = $router;   
     }
 
-    public function render(){
-        echo "hi";
-    }
-
-    
-    public function renderParams(){
-        
-        print_r($this->request->params);
+    public function view()
+    {
+        $this->renderView('login');
     }
 }
