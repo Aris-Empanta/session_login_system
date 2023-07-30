@@ -8,8 +8,8 @@ class App
     public function run()
     {
         //We import the config files
-        require_once "../config/routes.php";   
-        require "../config/constants.php";           
+        require_once dirname(__DIR__) . "/config/routes.php";   
+        require dirname(__DIR__) . "/config/constants.php";           
 
         //Handling non-fatal errors
         set_error_handler([ErrorHandler::class, 'handleNonFatalErrors']);
