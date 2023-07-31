@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteBase /
+
+# Exclude specific file types from being redirected
+RewriteCond %{REQUEST_URI} !\.(css|js)$
+
+# If the request is for a file or directory, serve it as-is
+RewriteCond %{REQUEST_FILENAME} -f 
+RewriteCond %{REQUEST_FILENAME} -d
+
+# Otherwise, route the request to public/index.php
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

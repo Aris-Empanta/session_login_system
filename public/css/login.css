@@ -1,8 +1,25 @@
 #loginPage {
-    background-color: aqua;
-    width: 100vw;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#hello {
-    color: aqua;
+#passwordLoginFormContainer {
+    box-shadow: 1px 1px 2px 2px black;
+    padding: 2.5% 1.5%;
+}
+
+#passwordLoginForm {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+#loginButton {
+    align-self: flex-end;
 }

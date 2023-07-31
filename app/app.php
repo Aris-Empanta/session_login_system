@@ -17,6 +17,10 @@ class App
         //Handling fatal errors
         register_shutdown_function([ErrorHandler::class, 'handleFatalErrors']);
 
+        
+        if(preg_match('/.css$/', $_SERVER['DOCUMENT_ROOT'] . $_SERVER['REQUEST_URI']))
+            return;
+
         //Handling a non existing uri from the client
         if($router->pageNotFound === true) {
 
