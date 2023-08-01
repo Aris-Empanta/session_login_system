@@ -8,4 +8,10 @@ class BaseController
     {
         require dirname(__DIR__) . "/app/views/$view.php";
     }
+
+    protected function redirect(string $uri) : void
+    {
+        header("Location: $uri");
+        exit;
+    }
 }

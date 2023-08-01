@@ -67,7 +67,8 @@ class Router
             if($lowerCaseClientUri === $lowerCaseRegisteredUri) {
               if($handler['method'] === $_SERVER['REQUEST_METHOD']) {  
 
-                $this->runMiddleware($handler['middleware']);
+                if($handler['middleware'])
+                    $this->runMiddleware($handler['middleware']);
                 
                 $this->extractRequestBody($handler['method']);
                 $this->extractFormBody($handler['method']);
@@ -120,7 +121,8 @@ class Router
         //We now check if it matches the $uri and the request method
         if (preg_match($routePattern, $uri, $matches) && $_SERVER['REQUEST_METHOD'] === $handler['method']) {
 
-            $this->runMiddleware($handler['middleware']);
+            if($handler['middleware'])
+                $this->runMiddleware($handler['middleware']);
 
             //From the matches array, we keep only the string keys, which are the params.
             foreach ($matches as $key => $value) {

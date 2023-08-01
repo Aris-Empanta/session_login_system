@@ -9,13 +9,14 @@
 </head>
 <body>
     <div id="loginPage">
+        <p><?php echo $this->wrongCredentials  ?></p>
         <div id="passwordLoginFormContainer">
-            <form id="passwordLoginForm" action = "<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+            <form id="passwordLoginForm" action = "/login" method="post">
                 <label for="username">Username</label>
                 <input type="text" name="username">
                 <label for="password">Password</label>
                 <input type="password" name="password">
-                <input type="submit" value="login" id="loginButton">
+                <input type="submit" value="login" name="login" id="loginButton">
             </form>
         </div>
     </div>
