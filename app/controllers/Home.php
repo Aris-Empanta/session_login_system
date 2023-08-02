@@ -16,6 +16,7 @@ class Home extends BaseController
 
     public function view()
     {
+        
         $this->renderView('home');
     }
 }

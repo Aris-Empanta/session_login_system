@@ -10,5 +10,6 @@ require_once __DIR__ . '/middleware/auth.php';
 //Import all your route files or write them here directly.
 require_once __DIR__ . '/routes/login.php';
 require_once __DIR__ . '/routes/home.php';
+require_once __DIR__ . '/routes/logout.php';
 
 $router->configure();

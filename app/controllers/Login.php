@@ -27,19 +27,32 @@ class Login extends BaseController
         $password = $this->request->formBody['password'];
 
         //The following code will be executed only if we submit the form
-        if (isset($_POST['login'])) {
+        if (isset($_POST['login']) && !empty($username) && !empty($password)) {
 
-            if(!empty($username) && !empty($password)) {
-            
+            if($username === "john" && $password === 'doe') {
+
+                $sessionSavePath = dirname(__DIR__) . '/sessions';
+                
+                if (!is_dir($sessionSavePath)) {
+                    mkdir($sessionSavePath);
+                }
+                session_save_path($sessionSavePath);
+                
+                session_start();
+                $_SESSION['username'] = $username;
+
                 $this->redirect('home');
                 return;
-            } else {
-                $this->wrongCredentials = 'Please fillup the credential areas!';
-            }
+            } 
 
-            
+            $this->wrongCredentials = 'Your username or password is incorrect!';
             $this->renderView('login');
             return;
         }
+
+        $this->wrongCredentials = 'Please fillup the credential areas!';
+                        
+        $this->renderView('login');
+        return;
     }
 }

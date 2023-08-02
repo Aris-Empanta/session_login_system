@@ -7,5 +7,8 @@
 </head>
 <body>
     <p>Home</p>
+    <form action="/logout" method="post">
+        <input type="submit" value="logout" name="logout">
+    </form>
 </body>
 </html>
